@@ -7,7 +7,7 @@
     <title>Eigenvalue & Eigenvector Analyzer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-                * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -136,9 +136,11 @@
             align-items: center;
             gap: 10px;
         }
-    }
-    .instructions ol {
-        padding-left: 20px;
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
         .instructions li {
             margin-bottom: 10px;
             color: #cbd5e1;
@@ -454,123 +456,127 @@
             animation: slideIn 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-    }
-}
-
-}
-
-}
-.notification.success {
-    background: linear-gradient(45deg, #28a745, #20c997);
-    .notification.error {
-        background: linear-gradient(45deg, #dc3545, #e83e8c);
+        
+        .notification.success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+        
+        .notification.error {
+            background: linear-gradient(45deg, #dc3545, #e83e8c);
+        }
+        
         .notification.warning {
             background: linear-gradient(45deg, #ffc107, #fd7e14);
-            .notification.info {
-                background: linear-gradient(45deg, #17a2b8, #20c9b0);
-                @keyframes slideIn {
-                    from {
-                        transform: translateX(100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(0);
-                        opacity: 1;
-                    }
-                }
-                
-                .result-correct,
-                .result-incorrect {
-                    padding: 20px;
-                    border-radius: 10px;
-                    margin: 15px 0;
-                }
-                
-                .result-correct {
-                    background: #d4edda;
-                    border-left: 5px solid #28a745;
-                }
-                
-                .result-incorrect {
-                    background: #f8d7da;
-                    border-left: 5px solid #dc3545;
-                }
-                
-                .result-correct i,
-                .result-incorrect i {
-                    font-size: 2rem;
-                    margin-bottom: 10px;
-                }
+        }
+        
+        .notification.info {
+            background: linear-gradient(45deg, #17a2b8, #20c9b0);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
             }
-            .result-correct i {
-                color: #28a745;
-                .result-incorrect i {
-                    color: #dc3545;
-                }
-                
-                .matrix-display,
-                .eigen-display {
-                    background: white;
-                    padding: 15px;
-                    border-radius: 8px;
-                    margin: 15px 0;
-                    font-family: 'Courier New', monospace;
-                }
-                
-                .hint-steps .step {
-                    background: white;
-                    padding: 15px;
-                    border-radius: 8px;
-                    margin: 15px 0;
-                    border-left: 4px solid #ffc107;
-                }
-                
-                .hint-steps pre {
-                    background: #f8f9fa;
-                    padding: 10px;
-                    border-radius: 5px;
-                    overflow-x: auto;
-                    font-family: 'Courier New', monospace;
-                }
-                
-                .tip {
-                    background: #e3f2fd;
-                    padding: 15px;
-                    border-radius: 8px;
-                    margin: 15px 0;
-                    border-left: 4px solid #2196f3;
-                }
-                
-                .general-hints .hint-item {
-                    background: white;
-                    padding: 15px;
-                    border-radius: 8px;
-                    margin: 15px 0;
-                }
-                
-                .issues ul {
-                    padding-left: 20px;
-                    margin: 10px 0;
-                }
-                
-                .issues li {
-                    margin-bottom: 5px;
-                    color: #721c24;
-                }
-                
-                @media (max-width: 1024px) {
-                    .container {
-                        flex-direction: column;
-                    }
-                }
-                
-                .sidebar {
-                    width: 100%;
-                    .matrix-grid input {
-                        width: 60px;
-                        height: 50px;
-                    }
-                }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .result-correct,
+        .result-incorrect {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .result-correct {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+        }
+        
+        .result-incorrect {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+        }
+        
+        .result-correct i,
+        .result-incorrect i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .result-correct i {
+            color: #28a745;
+        }
+        
+        .result-incorrect i {
+            color: #dc3545;
+        }
+        
+        .matrix-display,
+        .eigen-display {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .hint-steps .step {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .hint-steps pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .general-hints .hint-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .issues ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .issues li {
+            margin-bottom: 5px;
+            color: #721c24;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .matrix-grid input {
+                width: 60px;
+                height: 50px;
+            }
+        }
     </style>
 </head>
 
@@ -749,8 +755,7 @@ eigenvalues.</small>
             // Initialize with some values
             initializeMatrixValues();
         }
-        1\ n - 2, 1, -1 ';
-            // Initialize matrix with sample values
+        // Initialize matrix with sample values
         function initializeMatrixValues() {
             if (currentSize === 2) {
                 // Sample 2x2 matrix
@@ -772,7 +777,7 @@ eigenvalues.</small>
                 setMatrixValue(2, 1, 2);
                 setMatrixValue(2, 2, 4);
                 document.getElementById('eigenvalues').value = '3, 5, 3';
-                document.getElementById('eigenvectors').value = '1, 0, -1\n1, 0,
+                document.getElementById('eigenvectors').value = '1, 0, -1\n1, 0, 0\n0, 1, 0';
             } else if (currentSize === 4) {
                 // Sample 4x4 matrix (diagonal)
                 setMatrixValue(0, 0, 2);
@@ -792,8 +797,7 @@ eigenvalues.</small>
                 setMatrixValue(3, 2, 0);
                 setMatrixValue(3, 3, 1);
                 document.getElementById('eigenvalues').value = '2, 3, 4, 1';
-                document.getElementById('eigenvectors').value = '1, 0, 0, 0\n0, 1,
-                0, 0\ n0, 0, 1, 0\ n0, 0, 0, 1 ';
+                document.getElementById('eigenvectors').value = '1, 0, 0, 0\n0, 1, 0, 0\n0, 0, 1, 0\n0, 0, 0, 1';
             }
         }
         // Helper function to set matrix value
@@ -855,14 +859,14 @@ eigenvalues.</small>
                     return isNaN(num) ? 0 : num;
                 });
             }).filter(vec => vec !== null);
-            // Show loading overlay
-            function showLoading() {
-                document.getElementById('loadingOverlay').style.display = 'flex';
-                // Hide loading overlay
-                function hideLoading() {
-                    document.getElementById('loadingOverlay').style.display = 'none';
-                }
-            }
+        }
+        // Show loading overlay
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        // Hide loading overlay
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
         }
         // Show notification
         function showNotification(message, type = 'info') {
@@ -915,68 +919,61 @@ ${eigenvectors[i].length} components, but matrix is ${currentSize}x${currentSize
                         'error');
                     return;
                 }
-                backend)
+            }
+            showLoading();
+            // Simulate analysis with timeout (in real app, this would call
+            setTimeout(() => {
+                const result = analyzeSolution(matrix, eigenvalues, eigenvectors);
+                displayResults(result);
+                if (result.is_correct) {
+                    showNotification('All eigenvalues and eigenvectors are correct!', 'success');
+                } else {
+                    showNotification('Some values are incorrect. Check hints for guidance.', 'warning');
+                }
+                hideLoading();
+            }, 1500);
         }
-        showLoading();
-        // Simulate analysis with timeout (in real app, this would call
-        setTimeout(() => {
-                    const result = analyzeSolution(matrix, eigenvalues, eigenvectors);
-                    displayResults(result);
-                    if (result.is_correct) {
-                        showNotification('All eigenvalues and eigenvectors are
-                            correct!', '
-                            success ');
-                        }
-                        else {
-                            showNotification('Some values are incorrect. Check hints for
-                                guidance.
-                                ', '
-                                warning ');
-                            }
-                            hideLoading();
-                        }, 1500);
-                }
-                // Analyze solution (client-side logic)
-                function analyzeSolution(matrix, eigenvalues, eigenvectors) {
-                    let allCorrect = true;
-                    let errorMessages = [];
-                    // For each eigenvalue-eigenvector pair
-                    for (let i = 0; i < eigenvalues.length; i++) {
-                        const lambda = typeof eigenvalues[i] === 'object' ?
-                            eigenvalues[i].real : eigenvalues[i];
-                        const vector = eigenvectors[i].map(comp =>
-                            typeof comp === 'object' ? comp.real : comp
-                        );
-                        // Calculate A*v
-                        const Av = multiplyMatrixVector(matrix, vector);
-                        // Calculate λ*v
-                        const lambdaV = vector.map(x => lambda * x);
-                        // Check if they're approximately equal
-                        if (!vectorsApproximatelyEqual(Av, lambdaV, 0.001)) {
-                            allCorrect = false;
-                            errorMessages.push(`Pair ${i+1}: Av ≠ λv for eigenvalue
+        // Analyze solution (client-side logic)
+        function analyzeSolution(matrix, eigenvalues, eigenvectors) {
+            let allCorrect = true;
+            let errorMessages = [];
+            // For each eigenvalue-eigenvector pair
+            for (let i = 0; i < eigenvalues.length; i++) {
+                const lambda = typeof eigenvalues[i] === 'object' ?
+                    eigenvalues[i].real : eigenvalues[i];
+                const vector = eigenvectors[i].map(comp =>
+                    typeof comp === 'object' ? comp.real : comp
+                );
+                // Calculate A*v
+                const Av = multiplyMatrixVector(matrix, vector);
+                // Calculate λ*v
+                const lambdaV = vector.map(x => lambda * x);
+                // Check if they're approximately equal
+                if (!vectorsApproximatelyEqual(Av, lambdaV, 0.001)) {
+                    allCorrect = false;
+                    errorMessages.push(`Pair ${i+1}: Av ≠ λv for eigenvalue
 ${lambda}`);
-                        }
-                    }
-                    return {
-                        is_correct: allCorrect,
-                        matrix: matrix,
-                        user_eigenvalues: eigenvalues,
-                        user_eigenvectors: eigenvectors,
-                        hints: errorMessages
-                    };
                 }
-                // Display results
-                function displayResults(result) {
-                    const resultsSection = document.getElementById('resultsSection');
-                    const resultsContent = document.getElementById('resultsContent');
-                    const hintBox = document.getElementById('hintBox');
-                    // Show results section
-                    resultsSection.style.display = 'block';
-                    // Build results HTML
-                    let html = '';
-                    if (result.is_correct) {
-                        html = `
+            }
+            return {
+                is_correct: allCorrect,
+                matrix: matrix,
+                user_eigenvalues: eigenvalues,
+                user_eigenvectors: eigenvectors,
+                hints: errorMessages
+            };
+        }
+        // Display results
+        function displayResults(result) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContent = document.getElementById('resultsContent');
+            const hintBox = document.getElementById('hintBox');
+            // Show results section
+            resultsSection.style.display = 'block';
+            // Build results HTML
+            let html = '';
+            if (result.is_correct) {
+                html = `
 <div class="result-correct">
 <i class="fas fa-check-circle"></i>
 ✓ <h3> Correct Solution!</h3>
@@ -997,9 +994,9 @@ eigenvalue equation: A·v = λ·v
 </div>
 </div>
 `;
-                    } else {
-                        html = `
-hintBox.style.display = 'none';
+            } else {
+                hintBox.style.display = 'none';
+                html = `
 <div class="result-incorrect">
 <i class="fas fa-times-circle"></i>
 ✗ <h3> Solution Needs Correction</h3>
@@ -1071,7 +1068,6 @@ ${getSpecificHint(matrix, eigenvalues, eigenvectors)}
 hintContent.innerHTML = html;
 hintBox.style.display = 'block';
 }
-Calculation</h4>
 // Show general hints
 function showGeneralHints() {
 const hintBox = document.getElementById('hintBox');
@@ -1080,15 +1076,12 @@ let html = `
 <div class="general-hints">
 <h3>General Calculation Steps:</h3>
 <div class="hint-item">
-<h4><i class="fas fa-calculator"></i> Eigenvalues
+<h4><i class="fas fa-calculator"></i> Eigenvalues</h4>
 <ol>
-λI)</li>
-<li>Compute the characteristic polynomial: det(A -
+<li>Compute the characteristic polynomial: det(A - λI)</li>
 <li>Set the polynomial equal to zero</li>
 <li>Solve for λ (may be real or complex)</li>
-<li>For diagonal/triangular matrices: eigenvalues =
-diagonal entries</li>
-Calculation</h4>
+<li>For diagonal/triangular matrices: eigenvalues = diagonal entries</li>
 </ol>
 </div>
 <div class="hint-item">
@@ -1157,7 +1150,6 @@ result.push(sum);
 }
 return result;
 }
-tolerance) {
 function vectorsApproximatelyEqual(v1, v2, tolerance = 0.001) {
 if (v1.length !== v2.length) return false;
 // Check if v2 is a scalar multiple of v1
@@ -1170,12 +1162,12 @@ ratio = currentRatio;
 } else if (Math.abs(currentRatio - ratio) > tolerance) {
 return false;
 }
-} else if (Math.abs(v1[i]) > tolerance || Math.abs(v2[i]) >
-return false;
+} else if (Math.abs(v1[i]) > tolerance || Math.abs(v2[i]) > tolerance) {
+    return false;
+}
 }
 }
 return ratio !== null;
-}
 function formatMatrix(matrix) {
 return matrix.map(row =>
 '[' + row.map(num => typeof num === 'number' ? num.toFixed(2) :
@@ -1235,14 +1227,12 @@ return `
 <p>Use factorization or numerical methods to solve</p>
 `;
 }
-properties</p>";
+return "<p>Use determinant calculation methods or matrix properties</p>";
 }
-return "<p>Use determinant calculation methods or matrix
 function getSpecificHint(matrix, eigenvalues, eigenvectors) {
 // Provide specific hints based on the matrix structure
 const n = matrix.length;
-let hint = '<div class="step"><h4>Specific Hints for Your
-Matrix:</h4>';
+let hint = '<div class="step"><h4>Specific Hints for Your Matrix:</h4>';
 // Check if matrix is symmetric
 let isSymmetric = true;
 for (let i = 0; i < n; i++) {
@@ -1255,9 +1245,8 @@ break;
 if (!isSymmetric) break;
 }
 if (isSymmetric) {
-✓ hint += '<p> eigenvectors are orthogonal</p>';
+    hint += '<p>Your matrix is symmetric → eigenvalues are real, eigenvectors are orthogonal</p>';
 }
-Your matrix is symmetric → eigenvalues are real,
 // Check if matrix is diagonal
 let isDiagonal = true;
 for (let i = 0; i < n; i++) {
@@ -1270,10 +1259,9 @@ break;
 if (!isDiagonal) break;
 }
 if (isDiagonal) {
-✓ hint += '<p> entries</p>';
+    hint += '<p>Your matrix is diagonal → eigenvalues are diagonal entries</p>';
+    hint += '<p>Eigenvectors are standard basis vectors</p>';
 }
-Your matrix is diagonal → eigenvalues are diagonal
-✓ hint += '<p> Eigenvectors are standard basis vectors</p>';
 hint += '</div>';
 return hint;
 }
