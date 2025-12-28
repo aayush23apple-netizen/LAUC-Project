@@ -1,748 +1,1198 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eigenvalue & Eigenvector Analyzer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            display: flex;
-            max-width: 1600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            min-height: 90vh;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 350px;
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            padding: 30px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo i {
-            font-size: 2.5rem;
-            color: #4cc9f0;
-        }
-
-        .logo h2 {
-            font-size: 1.8rem;
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .team-section h3 {
-            color: #4cc9f0;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-member {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-            border-left: 4px solid #4361ee;
-        }
-
-        .team-member:hover {
-            transform: translateX(5px);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .member-number {
-            background: #4361ee;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .member-info {
-            flex: 1;
-        }
-
-        .member-name {
-            font-weight: 600;
-            font-size: 1rem;
-            color: white;
-        }
-
-        .member-prn {
-            font-size: 0.85rem;
-            color: #a9b7d6;
-            margin: 3px 0;
-        }
-
-        .member-role {
-            font-size: 0.8rem;
-            color: #4cc9f0;
-            background: rgba(76, 201, 240, 0.1);
-            padding: 4px 10px;
-            border-radius: 15px;
-            display: inline-block;
-        }
-
-        .instructions {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .instructions h3 {
-            color: #4cc9f0;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .instructions ol {
-            padding-left: 20px;
-        }
-
-        .instructions li {
-            margin-bottom: 10px;
-            color: #cbd5e1;
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        header h1 {
-            color: #1a1a2e;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .subtitle {
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-
-        .input-section {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-header h2 {
-            color: #1a1a2e;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .matrix-size-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .matrix-size-control label {
-            font-weight: 600;
-            color: #495057;
-        }
-
-        select {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: 2px solid #dee2e6;
-            background: white;
-            font-weight: 500;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .matrix-grid {
-            display: inline-grid;
-            gap: 12px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
-        }
-
-        .matrix-grid input {
-            width: 80px;
-            height: 60px;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: 500;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-family: 'Courier New', monospace;
-        }
-
-        .matrix-grid input:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            outline: none;
-        }
-
-        .eigen-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 1200px) {
-            .eigen-inputs {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .input-group {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-        }
-
-        .input-group h3 {
-            color: #1a1a2e;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: 'Segoe UI', sans-serif;
-            transition: all 0.3s;
-        }
-
-        input[type="text"]:focus,
-        textarea:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            outline: none;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-            font-family: 'Courier New', monospace;
-        }
-
-        small {
-            display: block;
-            margin-top: 8px;
-            color: #6c757d;
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 16px 25px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #4361ee, #3a0ca3);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
-        }
-
-        .results-section {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            display: none;
-        }
-
-        .results-section h2 {
-            color: #1a1a2e;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .hint-section {
-            background: #fff3cd;
-            border: 2px solid #ffeaa7;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            display: none;
-        }
-
-        .hint-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .hint-header h2 {
-            color: #856404;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: #856404;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 1000;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #4361ee;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-overlay p {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 10px;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .notification.success { background: linear-gradient(45deg, #28a745, #20c997); }
-        .notification.error { background: linear-gradient(45deg, #dc3545, #e83e8c); }
-        .notification.warning { background: linear-gradient(45deg, #ffc107, #fd7e14); }
-        .notification.info { background: linear-gradient(45deg, #17a2b8, #20c9b0); }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .result-correct, .result-incorrect {
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-        }
-
-        .result-correct {
-            background: #d4edda;
-            border-left: 5px solid #28a745;
-        }
-
-        .result-incorrect {
-            background: #f8d7da;
-            border-left: 5px solid #dc3545;
-        }
-
-        .matrix-display {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            white-space: pre;
-        }
-
-        @media (max-width: 1024px) {
-            .container { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .matrix-grid input { width: 60px; height: 50px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eigenvalue & Eigenvector Analyzer</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    display: flex;
+    max-width: 1600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    min-height: 90vh;
+}
+/* Sidebar Styles */
+.sidebar {
+    width: 350px;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    padding: 30px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+.logo i {
+    font-size: 2.5rem;
+    color: #4cc9f0;
+}
+.logo h2 {
+    font-size: 1.8rem;
+    background: linear-gradient(45deg, #4cc9f0, #4361ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.team-section h3 {
+    color: #4cc9f0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.team-member {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    border-left: 4px solid #4361ee;
+}
+.team-member:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+.member-number {
+    background: #4361ee;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.member-info {
+    flex: 1;
+}
+.member-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+}
+.member-prn {
+    font-size: 0.85rem;
+    color: #a9b7d6;
+    margin: 3px 0;
+}
+.member-role {
+    font-size: 0.8rem;
+    color: #4cc9f0;
+    background: rgba(76, 201, 240, 0.1);
+    padding: 4px 10px;
+    border-radius: 15px;
+    display: inline-block;
+}
+.instructions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.instructions h3 {
+    color: #4cc9f0;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.instructions ol {
+    padding-left: 20px;
+}
+.instructions li {
+    margin-bottom: 10px;
+    color: #cbd5e1;
+}
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+header h1 {
+    color: #1a1a2e;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.subtitle {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+.input-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.section-header h2 {
+    color: #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.matrix-size-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.matrix-size-control label {
+    font-weight: 600;
+    color: #495057;
+}
+select {
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+    background: white;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.matrix-grid {
+    display: inline-grid;
+    gap: 12px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+.matrix-grid input {
+    width: 80px;
+    height: 60px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-family: 'Courier New', monospace;
+}
+.matrix-grid input:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
+}
+.eigen-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+@media (max-width: 1200px) {
+    .eigen-inputs {
+        grid-template-columns: 1fr;
+    }
+}
+.input-group {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+}
+.input-group h3 {
+    color: #1a1a2e;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+input[type="text"], textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s;
+}
+input[type="text"]:focus, textarea:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
+}
+textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: 'Courier New', monospace;
+}
+small {
+    display: block;
+    margin-top: 8px;
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+.controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.btn {
+    flex: 1;
+    padding: 16px 25px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+.btn-primary {
+    background: linear-gradient(45deg, #4361ee, #3a0ca3);
+    color: white;
+}
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+}
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+.results-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    display: none;
+}
+.results-section h2 {
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.hint-section {
+    background: #fff3cd;
+    border: 2px solid #ffeaa7;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    display: none;
+}
+.hint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.hint-header h2 {
+    color: #856404;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #856404;
+    cursor: pointer;
+    line-height: 1;
+}
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #4361ee;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.loading-overlay p {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.notification.success {
+    background: linear-gradient(45deg, #28a745, #20c997);
+}
+.notification.error {
+    background: linear-gradient(45deg, #dc3545, #e83e8c);
+}
+.notification.warning {
+    background: linear-gradient(45deg, #ffc107, #fd7e14);
+}
+.notification.info {
+    background: linear-gradient(45deg, #17a2b8, #20c9b0);
+}
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+.result-correct, .result-incorrect {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+.result-correct {
+    background: #d4edda;
+    border-left: 5px solid #28a745;
+}
+.result-incorrect {
+    background: #f8d7da;
+    border-left: 5px solid #dc3545;
+}
+.result-correct i, .result-incorrect i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+.result-correct i {
+    color: #28a745;
+}
+.result-incorrect i {
+    color: #dc3545;
+}
+.matrix-display, .eigen-display {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+}
+.hint-steps .step {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #ffc107;
+}
+.hint-steps pre {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+}
+.tip {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #2196f3;
+}
+.general-hints .hint-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+.issues ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+.issues li {
+    margin-bottom: 5px;
+    color: #721c24;
+}
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+    }
+    .matrix-grid input {
+        width: 60px;
+        height: 50px;
+    }
+}
+</style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fas fa-atom"></i>
-                <h2>Eigen Analyzer</h2>
-            </div>
-            <div class="team-section">
-                <h3><i class="fas fa-users"></i> Development Team</h3>
-                <div class="team-member">
-                    <div class="member-number">1</div>
-                    <div class="member-info">
-                        <div class="member-name">Aarya Suryavanshi</div>
-                        <div class="member-prn">PRN: 125B1F235</div>
-                        <div class="member-role">Backend & UI Developer</div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-number">2</div>
-                    <div class="member-info">
-                        <div class="member-name">Shreya Irale</div>
-                        <div class="member-prn">PRN: 125B1F214</div>
-                        <div class="member-role">Frontend & Report</div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-number">3</div>
-                    <div class="member-info">
-                        <div class="member-name">Anjali Borse</div>
-                        <div class="member-prn">PRN: 125B1F236</div>
-                        <div class="member-role">Backend & PPT</div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-number">4</div>
-                    <div class="member-info">
-                        <div class="member-name">Samruddhi Magar</div>
-                        <div class="member-prn">PRN: 125B1F242</div>
-                        <div class="member-role">Frontend & Github</div>
-                    </div>
+<div class="container">
+    <!-- Sidebar with Team Information -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-atom"></i>
+            <h2>Eigen Analyzer</h2>
+        </div>
+        <div class="team-section">
+            <h3><i class="fas fa-users"></i> Development Team</h3>
+            <div class="team-member">
+                <div class="member-number">1</div>
+                <div class="member-info">
+                    <div class="member-name">Aarya Suryavanshi</div>
+                    <div class="member-prn">PRN: 125B1F235</div>
+                    <div class="member-role">Backend & UI Developer</div>
                 </div>
             </div>
-            <div class="instructions">
-                <h3><i class="fas fa-info-circle"></i> How to Use</h3>
-                <ol>
-                    <li>Enter matrix values in the grid</li>
-                    <li>Input eigenvalues (comma separated)</li>
-                    <li>Enter eigenvectors (one per line)</li>
-                    <li>Click "Analyze" to verify</li>
-                    <li>View hints for incorrect solutions</li>
-                </ol>
+            <div class="team-member">
+                <div class="member-number">2</div>
+                <div class="member-info">
+                    <div class="member-name">Shreya Irale</div>
+                    <div class="member-prn">PRN: 125B1F214</div>
+                    <div class="member-role">Frontend & Report</div>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-number">3</div>
+                <div class="member-info">
+                    <div class="member-name">Anjali Borse</div>
+                    <div class="member-prn">PRN: 125B1F236</div>
+                    <div class="member-role">Backend & PPT</div>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-number">4</div>
+                <div class="member-info">
+                    <div class="member-name">Samruddhi Magar</div>
+                    <div class="member-prn">PRN: 125B1F242</div>
+                    <div class="member-role">Frontend & Github</div>
+                </div>
             </div>
         </div>
-
-        <div class="main-content">
-            <header>
-                <h1><i class="fas fa-calculator"></i> Eigenvalue & Eigenvector Analyzer</h1>
-                <p class="subtitle">Verify your eigenvalue and eigenvector calculations with step-by-step guidance</p>
-            </header>
-
-            <div class="input-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-table"></i> Matrix Input</h2>
-                    <div class="matrix-size-control">
-                        <label>Matrix Size:</label>
-                        <select id="matrixSize">
-                            <option value="2">2×2</option>
-                            <option value="3" selected>3×3</option>
-                            <option value="4">4×4</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="matrixContainer" class="matrix-grid"></div>
-            </div>
-
-            <div class="eigen-inputs">
-                <div class="input-group">
-                    <h3><i class="fas fa-sigma"></i> Eigenvalues</h3>
-                    <input type="text" id="eigenvalues" placeholder="e.g., 3, 5, 3">
-                    <small>Separate values with commas.</small>
-                </div>
-                <div class="input-group">
-                    <h3><i class="fas fa-vector-square"></i> Eigenvectors</h3>
-                    <textarea id="eigenvectors" rows="5" placeholder="1, 0, -1&#10;1, 0, 0"></textarea>
-                    <small>One eigenvector per line, components separated by commas.</small>
-                </div>
-            </div>
-
-            <div class="controls">
-                <button class="btn btn-primary" id="analyzeBtn"><i class="fas fa-search"></i> Analyze Solution</button>
-                <button class="btn btn-secondary" id="hintBtn"><i class="fas fa-lightbulb"></i> Calculation Steps</button>
-                <button class="btn btn-danger" id="resetBtn"><i class="fas fa-redo"></i> Reset All</button>
-            </div>
-
-            <div class="results-section" id="resultsSection">
-                <h2><i class="fas fa-poll"></i> Analysis Results</h2>
-                <div id="resultsContent"></div>
-            </div>
-
-            <div class="hint-section" id="hintBox">
-                <div class="hint-header">
-                    <h2><i class="fas fa-graduation-cap"></i> Calculation Hints</h2>
-                    <button class="close-btn" id="closeHintBtn">&times;</button>
-                </div>
-                <div id="hintContent"></div>
-            </div>
-
-            <div class="loading-overlay" id="loadingOverlay">
-                <div class="spinner"></div>
-                <p>Analyzing your solution...</p>
-            </div>
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+            <ol>
+                <li>Enter matrix values in the grid</li>
+                <li>Input eigenvalues (comma separated)</li>
+                <li>Enter eigenvectors (one per line)</li>
+                <li>Click "Analyze" to verify</li>
+                <li>View hints for incorrect solutions</li>
+            </ol>
         </div>
     </div>
 
-    <script>
-        let currentSize = 3;
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <header>
+            <h1><i class="fas fa-calculator"></i> Eigenvalue & Eigenvector Analyzer</h1>
+            <p class="subtitle">Verify your eigenvalue and eigenvector calculations with step-by-step guidance</p>
+        </header>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            createMatrixInputs();
-            document.getElementById('matrixSize').addEventListener('change', createMatrixInputs);
-            document.getElementById('analyzeBtn').addEventListener('click', analyze);
-            document.getElementById('hintBtn').addEventListener('click', showGeneralHints);
-            document.getElementById('resetBtn').addEventListener('click', resetAll);
-            document.getElementById('closeHintBtn').addEventListener('click', closeHint);
+        <!-- Matrix Input Section -->
+        <div class="input-section">
+            <div class="section-header">
+                <h2><i class="fas fa-table"></i> Matrix Input</h2>
+                <div class="matrix-size-control">
+                    <label>Matrix Size:</label>
+                    <select id="matrixSize">
+                        <option value="2">2×2</option>
+                        <option value="3" selected>3×3</option>
+                        <option value="4">4×4</option>
+                    </select>
+                </div>
+            </div>
+            <div id="matrixContainer" class="matrix-grid">
+                <!-- Matrix inputs will be generated here -->
+            </div>
+        </div>
+
+        <!-- Eigenvalues and Eigenvectors Input -->
+        <div class="eigen-inputs">
+            <div class="input-group">
+                <h3><i class="fas fa-sigma"></i> Eigenvalues</h3>
+                <input type="text" id="eigenvalues" placeholder="Enter eigenvalues separated by commas (e.g., 2, 3, -1)">
+                <small>Separate values with commas. For complex: 2+3i, 2-3i</small>
+            </div>
+            <div class="input-group">
+                <h3><i class="fas fa-vector-square"></i> Eigenvectors</h3>
+                <textarea id="eigenvectors" rows="5" placeholder="Enter one eigenvector per line. Separate components with commas. Example:
+1, 0, -1
+0, 1, 0
+-2, 1, 1"></textarea>
+                <small>Each line = one eigenvector. Number should match eigenvalues.</small>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button class="btn btn-primary" id="analyzeBtn">
+                <i class="fas fa-search"></i> Analyze Solution
+            </button>
+            <button class="btn btn-secondary" id="hintBtn">
+                <i class="fas fa-lightbulb"></i> Show Calculation Steps
+            </button>
+            <button class="btn btn-danger" id="resetBtn">
+                <i class="fas fa-redo"></i> Reset All
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <h2><i class="fas fa-poll"></i> Analysis Results</h2>
+            <div id="resultsContent"></div>
+        </div>
+
+        <!-- Hint Box -->
+        <div class="hint-section" id="hintBox">
+            <div class="hint-header">
+                <h2><i class="fas fa-graduation-cap"></i> Calculation Hints</h2>
+                <button class="close-btn" id="closeHintBtn">&times;</button>
+            </div>
+            <div id="hintContent"></div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <p>Analyzing your solution...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Matrix size configuration
+let currentSize = 3;
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    createMatrixInputs();
+    
+    // Add event listeners
+    document.getElementById('matrixSize').addEventListener('change', createMatrixInputs);
+    document.getElementById('analyzeBtn').addEventListener('click', analyze);
+    document.getElementById('hintBtn').addEventListener('click', showGeneralHints);
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+    document.getElementById('closeHintBtn').addEventListener('click', closeHint);
+    
+    // Load example
+    loadExample();
+});
+
+// Create matrix input grid
+function createMatrixInputs() {
+    currentSize = parseInt(document.getElementById('matrixSize').value);
+    const container = document.getElementById('matrixContainer');
+    container.innerHTML = '';
+    
+    // Set grid template columns
+    container.style.gridTemplateColumns = `repeat(${currentSize}, 1fr)`;
+    
+    // Create input fields
+    for (let i = 0; i < currentSize; i++) {
+        for (let j = 0; j < currentSize; j++) {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.id = `m${i}${j}`;
+            input.className = 'matrix-cell';
+            input.placeholder = `a${i+1}${j+1}`;
+            input.step = 'any';
+            container.appendChild(input);
+        }
+    }
+}
+
+// Initialize matrix with sample values
+function initializeMatrixValues() {
+    if (currentSize === 2) {
+        // Sample 2x2 matrix
+        setMatrixValue(0, 0, 4);
+        setMatrixValue(0, 1, 1);
+        setMatrixValue(1, 0, 1);
+        setMatrixValue(1, 1, 4);
+        document.getElementById('eigenvalues').value = '3, 5';
+        document.getElementById('eigenvectors').value = '1, -1\n1, 1';
+    } else if (currentSize === 3) {
+        // Sample 3x3 matrix
+        setMatrixValue(0, 0, 4);
+        setMatrixValue(0, 1, 1);
+        setMatrixValue(0, 2, 2);
+        setMatrixValue(1, 0, 0);
+        setMatrixValue(1, 1, 3);
+        setMatrixValue(1, 2, 0);
+        setMatrixValue(2, 0, 1);
+        setMatrixValue(2, 1, 2);
+        setMatrixValue(2, 2, 4);
+        document.getElementById('eigenvalues').value = '3, 5, 3';
+        document.getElementById('eigenvectors').value = '1, 0, -1\n1, 0, 1\n-2, 1, -1';
+    } else if (currentSize === 4) {
+        // Sample 4x4 matrix (diagonal)
+        setMatrixValue(0, 0, 2);
+        setMatrixValue(0, 1, 0);
+        setMatrixValue(0, 2, 0);
+        setMatrixValue(0, 3, 0);
+        setMatrixValue(1, 0, 0);
+        setMatrixValue(1, 1, 3);
+        setMatrixValue(1, 2, 0);
+        setMatrixValue(1, 3, 0);
+        setMatrixValue(2, 0, 0);
+        setMatrixValue(2, 1, 0);
+        setMatrixValue(2, 2, 4);
+        setMatrixValue(2, 3, 0);
+        setMatrixValue(3, 0, 0);
+        setMatrixValue(3, 1, 0);
+        setMatrixValue(3, 2, 0);
+        setMatrixValue(3, 3, 1);
+        document.getElementById('eigenvalues').value = '2, 3, 4, 1';
+        document.getElementById('eigenvectors').value = '1, 0, 0, 0\n0, 1, 0, 0\n0, 0, 1, 0\n0, 0, 0, 1';
+    }
+}
+
+// Helper function to set matrix value
+function setMatrixValue(row, col, value) {
+    const input = document.getElementById(`m${row}${col}`);
+    if (input) input.value = value;
+}
+
+// Load example data
+function loadExample() {
+    createMatrixInputs();
+    initializeMatrixValues();
+    showNotification('Example loaded successfully!', 'success');
+}
+
+// Get matrix data
+function getMatrixData() {
+    const matrix = [];
+    for (let i = 0; i < currentSize; i++) {
+        matrix[i] = [];
+        for (let j = 0; j < currentSize; j++) {
+            const val = document.getElementById(`m${i}${j}`).value;
+            matrix[i][j] = val === '' ? 0 : parseFloat(val);
+        }
+    }
+    return matrix;
+}
+
+// Get eigenvalues
+function getEigenvalues() {
+    const input = document.getElementById('eigenvalues').value;
+    if (!input.trim()) return [];
+    
+    return input.split(',').map(val => {
+        const trimmed = val.trim();
+        // Handle simple complex numbers (basic support)
+        if (trimmed.includes('i')) {
+            const real = trimmed.replace('i', '').trim();
+            return { real: parseFloat(real) || 0, imag: 1 };
+        }
+        const num = parseFloat(trimmed);
+        return isNaN(num) ? null : num;
+    }).filter(val => val !== null);
+}
+
+// Get eigenvectors
+function getEigenvectors() {
+    const input = document.getElementById('eigenvectors').value;
+    if (!input.trim()) return [];
+    
+    return input.split('\n').map(line => {
+        if (!line.trim()) return null;
+        return line.split(',').map(val => {
+            const trimmed = val.trim();
+            if (trimmed.includes('i')) {
+                const real = trimmed.replace('i', '').trim();
+                return { real: parseFloat(real) || 0, imag: 1 };
+            }
+            const num = parseFloat(trimmed);
+            return isNaN(num) ? 0 : num;
         });
+    }).filter(vec => vec !== null);
+}
 
-        function createMatrixInputs() {
-            currentSize = parseInt(document.getElementById('matrixSize').value);
-            const container = document.getElementById('matrixContainer');
-            container.innerHTML = '';
-            container.style.gridTemplateColumns = `repeat(${currentSize}, 1fr)`;
-            for (let i = 0; i < currentSize; i++) {
-                for (let j = 0; j < currentSize; j++) {
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    input.id = `m${i}${j}`;
-                    input.placeholder = `a${i+1}${j+1}`;
-                    input.step = 'any';
-                    container.appendChild(input);
-                }
-            }
-            initializeMatrixValues();
+// Show loading overlay
+function showLoading() {
+    document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+// Hide loading overlay
+function hideLoading() {
+    document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notif => notif.remove());
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    let icon = 'info-circle';
+    if (type === 'success') icon = 'check-circle';
+    else if (type === 'error') icon = 'exclamation-circle';
+    else if (type === 'warning') icon = 'exclamation-triangle';
+    
+    notification.innerHTML = `
+        <i class="fas fa-${icon}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Analyze solution
+function analyze() {
+    const matrix = getMatrixData();
+    const eigenvalues = getEigenvalues();
+    const eigenvectors = getEigenvectors();
+    
+    // Validation
+    if (eigenvalues.length === 0) {
+        showNotification('Please enter at least one eigenvalue', 'error');
+        return;
+    }
+    
+    if (eigenvectors.length === 0) {
+        showNotification('Please enter at least one eigenvector', 'error');
+        return;
+    }
+    
+    if (eigenvalues.length !== eigenvectors.length) {
+        showNotification(`Number of eigenvalues (${eigenvalues.length}) doesn't match number of eigenvectors (${eigenvectors.length})`, 'error');
+        return;
+    }
+    
+    // Check eigenvector dimensions
+    for (let i = 0; i < eigenvectors.length; i++) {
+        if (eigenvectors[i].length !== currentSize) {
+            showNotification(`Eigenvector ${i+1} has ${eigenvectors[i].length} components, but matrix is ${currentSize}x${currentSize}`, 'error');
+            return;
         }
-
-        function initializeMatrixValues() {
-            const defaults = {
-                2: { m: [[4,1],[1,4]], ev: "3, 5", evec: "1, -1\n1, 1" },
-                3: { m: [[4,1,2],[0,3,0],[1,2,4]], ev: "3, 5, 3", evec: "1, 0, -1\n1, 0, 0\n0, 1, 0" },
-                4: { m: [[2,0,0,0],[0,3,0,0],[0,0,4,0],[0,0,0,1]], ev: "2, 3, 4, 1", evec: "1,0,0,0\n0,1,0,0\n0,0,1,0\n0,0,0,1" }
-            };
-            const data = defaults[currentSize];
-            for(let i=0; i<currentSize; i++) {
-                for(let j=0; j<currentSize; j++) {
-                    document.getElementById(`m${i}${j}`).value = data.m[i][j];
-                }
-            }
-            document.getElementById('eigenvalues').value = data.ev;
-            document.getElementById('eigenvectors').value = data.evec;
+    }
+    
+    showLoading();
+    
+    // Simulate analysis with timeout
+    setTimeout(() => {
+        const result = analyzeSolution(matrix, eigenvalues, eigenvectors);
+        displayResults(result);
+        
+        if (result.is_correct) {
+            showNotification('All eigenvalues and eigenvectors are correct!', 'success');
+        } else {
+            showNotification('Some values are incorrect. Check hints for guidance.', 'warning');
         }
+        
+        hideLoading();
+    }, 1500);
+}
 
-        function getMatrixData() {
-            let matrix = [];
-            for (let i = 0; i < currentSize; i++) {
-                matrix[i] = [];
-                for (let j = 0; j < currentSize; j++) {
-                    const val = document.getElementById(`m${i}${j}`).value;
-                    matrix[i][j] = val === '' ? 0 : parseFloat(val);
-                }
-            }
-            return matrix;
+// Analyze solution (client-side logic)
+function analyzeSolution(matrix, eigenvalues, eigenvectors) {
+    let allCorrect = true;
+    let errorMessages = [];
+    
+    // For each eigenvalue-eigenvector pair
+    for (let i = 0; i < eigenvalues.length; i++) {
+        const lambda = typeof eigenvalues[i] === 'object' ? eigenvalues[i].real : eigenvalues[i];
+        const vector = eigenvectors[i].map(comp => 
+            typeof comp === 'object' ? comp.real : comp
+        );
+        
+        // Calculate A*v
+        const Av = multiplyMatrixVector(matrix, vector);
+        
+        // Calculate λ*v
+        const lambdaV = vector.map(x => lambda * x);
+        
+        // Check if they're approximately equal
+        if (!vectorsApproximatelyEqual(Av, lambdaV, 0.001)) {
+            allCorrect = false;
+            errorMessages.push(`Pair ${i+1}: Av ≠ λv for eigenvalue ${lambda.toFixed(2)}`);
         }
+    }
+    
+    return {
+        is_correct: allCorrect,
+        matrix: matrix,
+        user_eigenvalues: eigenvalues,
+        user_eigenvectors: eigenvectors,
+        hints: errorMessages
+    };
+}
 
-        function analyze() {
-            const matrix = getMatrixData();
-            const evRaw = document.getElementById('eigenvalues').value.split(',').map(s => parseFloat(s.trim()));
-            const evecRaw = document.getElementById('eigenvectors').value.split('\n').map(l => l.split(',').map(s => parseFloat(s.trim())));
-
-            if (evRaw.some(isNaN) || evecRaw.some(r => r.some(isNaN))) {
-                showNotification("Please enter valid numbers", "error");
-                return;
-            }
-
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                let results = [];
-                let allOk = true;
-
-                evRaw.forEach((lambda, idx) => {
-                    const v = evecRaw[idx];
-                    if (!v || v.length !== currentSize) return;
-
-                    // Compute A*v
-                    let Av = [];
-                    for(let i=0; i<currentSize; i++) {
-                        let sum = 0;
-                        for(let j=0; j<currentSize; j++) sum += matrix[i][j] * v[j];
-                        Av.push(sum);
-                    }
-
-                    // Compute lambda*v
-                    let lv = v.map(x => x * lambda);
-
-                    // Verify equality
-                    const match = Av.every((val, i) => Math.abs(val - lv[i]) < 0.01);
-                    if(!match) allOk = false;
-                    results.push(`Pair ${idx+1} (λ=${lambda}): ${match ? '✅ Correct' : '❌ Incorrect'}`);
-                });
-
-                displayResults(allOk, results, matrix);
-            }, 1000);
-        }
-
-        function displayResults(allOk, details, matrix) {
-            const section = document.getElementById('resultsSection');
-            const content = document.getElementById('resultsContent');
-            section.style.display = 'block';
-            content.innerHTML = `
-                <div class="${allOk ? 'result-correct' : 'result-incorrect'}">
-                    <i class="fas fa-${allOk ? 'check-circle' : 'times-circle'}"></i>
-                    <h3>${allOk ? 'Perfect!' : 'Issues Found'}</h3>
-                    <p>${details.join('<br>')}</p>
-                    <div class="matrix-display">Matrix A:<br>${matrix.map(r => r.join('\t')).join('\n')}</div>
-                </div>`;
-        }
-
-        function showGeneralHints() {
-            const hintBox = document.getElementById('hintBox');
-            const content = document.getElementById('hintContent');
-            hintBox.style.display = 'block';
-            content.innerHTML = `
+// Display results
+function displayResults(result) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsContent = document.getElementById('resultsContent');
+    
+    // Show results section
+    resultsSection.style.display = 'block';
+    
+    // Build results HTML
+    let html = '';
+    
+    if (result.is_correct) {
+        html = `
+            <div class="result-correct">
+                <i class="fas fa-check-circle"></i>
+                <h3>✓ Correct Solution!</h3>
+                <p>All eigenvalues and eigenvectors are verified correctly.</p>
+                <div class="matrix-display">
+                    <h4>Your Matrix A:</h4>
+                    <pre>${formatMatrix(result.matrix)}</pre>
+                </div>
+                <div class="eigen-display">
+                    <h4>Verified Eigenvalues:</h4>
+                    <p><strong>${formatEigenvalues(result.user_eigenvalues)}</strong></p>
+                </div>
                 <div class="tip">
-                    <strong>Step 1:</strong> Solve det(A - λI) = 0 for eigenvalues.<br>
-                    <strong>Step 2:</strong> Solve (A - λI)v = 0 for eigenvectors.<br>
-                    <strong>Verification:</strong> Check if A × v = λ × v.
-                </div>`;
-        }
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>Great job!</strong> Your solution satisfies the eigenvalue equation: A·v = λ·v
+                </div>
+            </div>
+        `;
+    } else {
+        html = `
+            <div class="result-incorrect">
+                <i class="fas fa-times-circle"></i>
+                <h3>✗ Solution Needs Correction</h3>
+                <p>Some eigenvalues or eigenvectors are incorrect.</p>
+                <div class="issues">
+                    <h4>Issues found:</h4>
+                    <ul>
+                        ${result.hints.map(hint => `<li>${hint}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="matrix-display">
+                    <h4>Your Matrix A:</h4>
+                    <pre>${formatMatrix(result.matrix)}</pre>
+                </div>
+            </div>
+        `;
+        
+        // Show hint box
+        showDetailedHints(result.matrix, result.user_eigenvalues, result.user_eigenvectors);
+    }
+    
+    resultsContent.innerHTML = html;
+    
+    // Scroll to results
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
 
-        function showNotification(msg, type) {
-            const div = document.createElement('div');
-            div.className = `notification ${type}`;
-            div.innerText = msg;
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 3000);
-        }
+// Show detailed hints
+function showDetailedHints(matrix, eigenvalues, eigenvectors) {
+    const hintBox = document.getElementById('hintBox');
+    const hintContent = document.getElementById('hintContent');
+    
+    let html = `
+        <div class="hint-steps">
+            <h3>Step-by-Step Calculation Guide:</h3>
+            <div class="step">
+                <h4>Step 1: Characteristic Equation</h4>
+                <p>Calculate det(A - λI) = 0 where I is the identity matrix</p>
+                <p>For your ${matrix.length}x${matrix.length} matrix:</p>
+                <pre>A - λI = ${formatCharacteristicMatrix(matrix)}</pre>
+            </div>
+            <div class="step">
+                <h4>Step 2: Find Eigenvalues</h4>
+                <p>Solve the characteristic polynomial:</p>
+                ${getEigenvalueHint(matrix)}
+            </div>
+            <div class="step">
+                <h4>Step 3: Find Eigenvectors</h4>
+                <p>For each eigenvalue λₖ, solve (A - λₖI)v = 0:</p>
+                <ol>
+                    <li>Substitute λₖ into (A - λI)</li>
+                    <li>Row reduce to echelon form</li>
+                    <li>Find null space basis vectors</li>
+                    <li>These are your eigenvectors</li>
+                </ol>
+            </div>
+            <div class="step">
+                <h4>Step 4: Verification</h4>
+                <p>Check Av = λv for each pair:</p>
+                <pre>Multiply matrix A with each eigenvector v
+Result should equal λ × v (within small tolerance)</pre>
+            </div>
+            <div class="tip">
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>Important:</strong> Eigenvectors are not unique! Any non-zero scalar multiple is also valid.
+            </div>
+            ${getSpecificHint(matrix, eigenvalues, eigenvectors)}
+        </div>
+    `;
+    
+    hintContent.innerHTML = html;
+    hintBox.style.display = 'block';
+}
 
-        function resetAll() { location.reload(); }
-        function closeHint() { document.getElementById('hintBox').style.display = 'none'; }
-    </script>
+// Show general hints
+function showGeneralHints() {
+    const hintBox = document.getElementById('hintBox');
+    const hintContent = document.getElementById('hintContent');
+    
+    let html = `
+        <div class="general-hints">
+            <h3>General Calculation Steps:</h3>
+            <div class="hint-item">
+                <h4><i class="fas fa-calculator"></i> Eigenvalues Calculation</h4>
+                <ol>
+                    <li>Compute the characteristic polynomial: det(A - λI)</li>
+                    <li>Set the polynomial equal to zero</li>
+                    <li>Solve for λ (may be real or complex)</li>
+                    <li>For diagonal/triangular matrices: eigenvalues = diagonal entries</li>
+                </ol>
+            </div>
+            <div class="hint-item">
+                <h4><i class="fas fa-vector-square"></i> Eigenvectors Calculation</h4>
+                <ol>
+                    <li>For each eigenvalue λ, solve (A - λI)v = 0</li>
+                    <li>This gives a homogeneous system of equations</li>
+                    <li>Row reduce to find the null space basis</li>
+                    <li>Any non-zero vector in null space is an eigenvector</li>
+                </ol>
+            </div>
+            <div class="hint-item">
+                <h4><i class="fas fa-check-double"></i> Verification</h4>
+                <ul>
+                    <li>Check Av = λv for each pair</li>
+                    <li>Eigenvectors are not unique (can be scaled)</li>
+                    <li>Complex eigenvalues come in conjugate pairs</li>
+                    <li>Corresponding eigenvectors are also complex conjugates</li>
+                </ul>
+            </div>
+            <div class="example">
+                <h4>Example: 2×2 Matrix</h4>
+                <p>For A = [[2, 1], [1, 2]]:</p>
+                <ul>
+                    <li>Characteristic: det([[2-λ, 1], [1, 2-λ]]) = (2-λ)² - 1 = λ² - 4λ + 3 = 0</li>
+                    <li>Eigenvalues: λ₁ = 1, λ₂ = 3</li>
+                    <li>For λ=1: Solve [[1, 1], [1, 1]]v = 0 → v₁ = [1, -1]ᵀ</li>
+                    <li>For λ=3: Solve [[-1, 1], [1, -1]]v = 0 → v₂ = [1, 1]ᵀ</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    hintContent.innerHTML = html;
+    hintBox.style.display = 'block';
+    hintBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Close hint box
+function closeHint() {
+    document.getElementById('hintBox').style.display = 'none';
+}
+
+// Reset all inputs
+function resetAll() {
+    if (confirm('Are you sure you want to reset all inputs?')) {
+        createMatrixInputs();
+        document.getElementById('eigenvalues').value = '';
+        document.getElementById('eigenvectors').value = '';
+        document.getElementById('resultsSection').style.display = 'none';
+        document.getElementById('hintBox').style.display = 'none';
+        showNotification('All inputs have been reset', 'info');
+    }
+}
+
+// Helper functions
+function multiplyMatrixVector(matrix, vector) {
+    const result = [];
+    for (let i = 0; i < matrix.length; i++) {
+        let sum = 0;
+        for (let j = 0; j < matrix[i].length; j++) {
+            sum += matrix[i][j] * vector[j];
+        }
+        result.push(sum);
+    }
+    return result;
+}
+
+function vectorsApproximatelyEqual(v1, v2, tolerance = 0.001) {
+    if (v1.length !== v2.length) return false;
+    
+    // Check if vectors are approximately equal component-wise
+    for (let i = 0; i < v1.length; i++) {
+        if (Math.abs(v1[i] - v2[i]) > tolerance) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function formatMatrix(matrix) {
+    return matrix.map(row =>
+        '[' + row.map(num => typeof num === 'number' ? num.toFixed(2) : num).join(', ') + ']'
+    ).join('\n');
+}
+
+function formatEigenvalues(eigenvalues) {
+    return eigenvalues.map(ev => {
+        if (typeof ev === 'object') {
+            return ev.imag === 0 ? ev.real.toFixed(2) : `${ev.real} + ${ev.imag}i`;
+        }
+        return ev.toFixed(2);
+    }).join(', ');
+}
+
+function formatCharacteristicMatrix(matrix) {
+    const size = matrix.length;
+    let result = '';
+    for (let i = 0; i < size; i++) {
+        let row = '[';
+        for (let j = 0; j < size; j++) {
+            if (i === j) {
+                const val = matrix[i][j];
+                if (val === 0) {
+                    row += '-λ';
+                } else {
+                    row += `${val} - λ`;
+                }
+            } else {
+                row += matrix[i][j];
+            }
+            if (j < size - 1) row += ', ';
+        }
+        row += ']';
+        result += row + '\n';
+    }
+    return result;
+}
+
+function getEigenvalueHint(matrix) {
+    const n = matrix.length;
+    if (n === 2) {
+        const a = matrix[0][0], b = matrix[0][1];
+        const c = matrix[1][0], d = matrix[1][1];
+        const trace = a + d;
+        const det = a * d - b * c;
+        return `
+            <p>For 2×2 matrix: λ² - (trace)λ + (determinant) = 0</p>
+            <p>λ² - (${trace})λ + (${det}) = 0</p>
+            <p>Solve using quadratic formula: λ = [${trace} ± √(${trace}² - 4×${det})] / 2</p>
+        `;
+    } else if (n === 3) {
+        return `
+            <p>For 3×3 matrix, characteristic polynomial is cubic:</p>
+            <p>λ³ - (trace)λ² + (sum of principal minors)λ - (determinant) = 0</p>
+            <p>Use factorization or numerical methods to solve</p>
+        `;
+    }
+    return "<p>Use determinant calculation methods or matrix properties</p>";
+}
+
+function getSpecificHint(matrix, eigenvalues, eigenvectors) {
+    const n = matrix.length;
+    let hint = '<div class="step"><h4>Specific Hints for Your Matrix:</h4>';
+    
+    // Check if matrix is symmetric
+    let isSymmetric = true;
+    for (let i = 0; i < n; i++) {
+        for (let j = i+1; j < n; j++) {
+            if (Math.abs(matrix[i][j] - matrix[j][i]) > 0.001) {
+                isSymmetric = false;
+                break;
+            }
+        }
+        if (!isSymmetric) break;
+    }
+    
+    if (isSymmetric) {
+        hint += '<p>✓ Your matrix is symmetric → eigenvalues are real, eigenvectors are orthogonal</p>';
+    }
+    
+    // Check if matrix is diagonal
+    let isDiagonal = true;
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            if (i !== j && Math.abs(matrix[i][j]) > 0.001) {
+                isDiagonal = false;
+                break;
+            }
+        }
+        if (!isDiagonal) break;
+    }
+    
+    if (isDiagonal) {
+        hint += '<p>✓ Your matrix is diagonal → eigenvalues are diagonal entries</p>';
+        hint += '<p>✓ Eigenvectors are standard basis vectors</p>';
+    }
+    
+    hint += '</div>';
+    return hint;
+}
+</script>
 </body>
 </html>
