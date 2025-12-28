@@ -1,886 +1,982 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eigenvalue & Eigenvector Analyzer</title>
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eigenvalue & Eigenvector Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+                * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            min-height: 90vh;
+        }
+        /* Sidebar Styles */
+        
+        .sidebar {
+            width: 350px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: #4cc9f0;
+        }
+        
+        .logo h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .team-section h3 {
+            color: #4cc9f0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .team-member {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .team-member:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .member-number {
+            background: #4361ee;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .member-info {
+            flex: 1;
+        }
+        
+        .member-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+        }
+        
+        .member-prn {
+            font-size: 0.85rem;
+            color: #a9b7d6;
+            margin: 3px 0;
+        }
+        
+        .member-role {
+            font-size: 0.8rem;
+            color: #4cc9f0;
+            background: rgba(76, 201, 240, 0.1);
+            padding: 4px 10px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions h3 {
+            color: #4cc9f0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    }
+    .instructions ol {
+        padding-left: 20px;
+        .instructions li {
+            margin-bottom: 10px;
+            color: #cbd5e1;
+        }
+        /* Main Content Styles */
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        header h1 {
+            color: #1a1a2e;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-header h2 {
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .matrix-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .matrix-size-control label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            background: white;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .matrix-grid {
+            display: inline-grid;
+            gap: 12px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .matrix-grid input {
+            width: 80px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .matrix-grid input:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        .eigen-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .eigen-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .input-group h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        small {
+            display: block;
+            margin-top: 8px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px 25px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .results-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: none;
+        }
+        
+        .results-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .hint-section {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: none;
+        }
+        
+        .hint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .hint-header h2 {
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #856404;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4361ee;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .loading-overlay p {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        /* Notification Styles */
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    }
 }
-body {
-background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-min-height: 100vh;
-padding: 20px;
+
 }
-.container {
-display: flex;
-max-width: 1600px;
-margin: 0 auto;
-background: white;
-border-radius: 20px;
-overflow: hidden;
-box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-min-height: 90vh;
-}
-/* Sidebar Styles */
-.sidebar {
-width: 350px;
-background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-color: white;
-padding: 30px;
-}
-.logo {
-display: flex;
-align-items: center;
-gap: 15px;
-margin-bottom: 40px;
-padding-bottom: 20px;
-border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-.logo i {
-font-size: 2.5rem;
-color: #4cc9f0;
-}
-.logo h2 {
-font-size: 1.8rem;
-background: linear-gradient(45deg, #4cc9f0, #4361ee);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-.team-section h3 {
-color: #4cc9f0;
-margin-bottom: 20px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.team-member {
-background: rgba(255, 255, 255, 0.05);
-border-radius: 12px;
-padding: 15px;
-margin-bottom: 15px;
-display: flex;
-align-items: center;
-gap: 15px;
-transition: all 0.3s ease;
-border-left: 4px solid #4361ee;
-}
-.team-member:hover {
-transform: translateX(5px);
-background: rgba(255, 255, 255, 0.1);
-}
-.member-number {
-background: #4361ee;
-color: white;
-width: 32px;
-height: 32px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-weight: bold;
-font-size: 1rem;
-}
-.member-info {
-flex: 1;
-}
-.member-name {
-font-weight: 600;
-font-size: 1rem;
-color: white;
-}
-.member-prn {
-font-size: 0.85rem;
-color: #a9b7d6;
-margin: 3px 0;
-}
-.member-role {
-font-size: 0.8rem;
-color: #4cc9f0;
-background: rgba(76, 201, 240, 0.1);
-padding: 4px 10px;
-border-radius: 15px;
-display: inline-block;
-}
-.instructions {
-margin-top: 30px;
-padding-top: 20px;
-border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-.instructions h3 {
-color: #4cc9f0;
-margin-bottom: 15px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-}
-.instructions ol {
-padding-left: 20px;
-.instructions li {
-margin-bottom: 10px;
-color: #cbd5e1;
-}
-/* Main Content Styles */
-.main-content {
-flex: 1;
-padding: 30px;
-overflow-y: auto;
-}
-header {
-margin-bottom: 30px;
-padding-bottom: 20px;
-border-bottom: 2px solid #e9ecef;
-}
-header h1 {
-color: #1a1a2e;
-font-size: 2.2rem;
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 15px;
-}
-.subtitle {
-color: #6c757d;
-font-size: 1.1rem;
-}
-.input-section {
-background: #f8f9fa;
-border-radius: 15px;
-padding: 25px;
-margin-bottom: 25px;
-}
-.section-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 20px;
-}
-.section-header h2 {
-color: #1a1a2e;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.matrix-size-control {
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.matrix-size-control label {
-font-weight: 600;
-color: #495057;
-}
-select {
-padding: 8px 15px;
-border-radius: 8px;
-border: 2px solid #dee2e6;
-background: white;
-font-weight: 500;
-font-size: 1rem;
-cursor: pointer;
-}
-.matrix-grid {
-display: inline-grid;
-gap: 12px;
-background: white;
-padding: 20px;
-border-radius: 10px;
-border: 2px solid #e9ecef;
-}
-.matrix-grid input {
-width: 80px;
-height: 60px;
-text-align: center;
-font-size: 1.1rem;
-font-weight: 500;
-border: 2px solid #dee2e6;
-border-radius: 8px;
-transition: all 0.3s;
-font-family: 'Courier New', monospace;
-}
-.matrix-grid input:focus {
-border-color: #4361ee;
-box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-outline: none;
-}
-.eigen-inputs {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 25px;
-margin-bottom: 30px;
-}
-@media (max-width: 1200px) {
-.eigen-inputs {
-grid-template-columns: 1fr;
-}
-}
-.input-group {
-background: #f8f9fa;
-border-radius: 15px;
-padding: 25px;
-}
-.input-group h3 {
-color: #1a1a2e;
-margin-bottom: 15px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-input[type="text"], textarea {
-width: 100%;
-padding: 15px;
-border: 2px solid #dee2e6;
-border-radius: 10px;
-font-size: 1rem;
-font-family: 'Segoe UI', sans-serif;
-transition: all 0.3s;
-}
-input[type="text"]:focus, textarea:focus {
-border-color: #4361ee;
-box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-outline: none;
-}
-textarea {
-resize: vertical;
-min-height: 120px;
-font-family: 'Courier New', monospace;
-}
-small {
-display: block;
-margin-top: 8px;
-color: #6c757d;
-font-size: 0.9rem;
-font-style: italic;
-}
-.controls {
-display: flex;
-gap: 15px;
-margin-bottom: 30px;
-}
-.btn {
-flex: 1;
-padding: 16px 25px;
-border: none;
-border-radius: 12px;
-font-weight: 600;
-font-size: 1rem;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 10px;
-transition: all 0.3s ease;
-}
-.btn-primary {
-background: linear-gradient(45deg, #4361ee, #3a0ca3);
-color: white;
-}
-.btn-primary:hover {
-transform: translateY(-3px);
-box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
-}
-.btn-secondary {
-background: #6c757d;
-color: white;
-}
-.btn-secondary:hover {
-background: #5a6268;
-transform: translateY(-3px);
-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-.btn-danger {
-background: #dc3545;
-color: white;
-}
-.btn-danger:hover {
-background: #c82333;
-transform: translateY(-3px);
-box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
-}
-.results-section {
-background: #f8f9fa;
-border-radius: 15px;
-padding: 25px;
-margin-bottom: 25px;
-display: none;
-}
-.results-section h2 {
-color: #1a1a2e;
-margin-bottom: 20px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.hint-section {
-background: #fff3cd;
-border: 2px solid #ffeaa7;
-border-radius: 15px;
-padding: 25px;
-margin-bottom: 25px;
-display: none;
-}
-.hint-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 20px;
-}
-.hint-header h2 {
-color: #856404;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.close-btn {
-background: none;
-border: none;
-font-size: 2rem;
-color: #856404;
-cursor: pointer;
-line-height: 1;
-}
-.loading-overlay {
-position: fixed;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background: rgba(0, 0, 0, 0.7);
-display: none;
-justify-content: center;
-align-items: center;
-flex-direction: column;
-z-index: 1000;
-}
-.spinner {
-width: 60px;
-height: 60px;
-border: 6px solid #f3f3f3;
-border-top: 6px solid #4361ee;
-border-radius: 50%;
-animation: spin 1s linear infinite;
-margin-bottom: 20px;
-}
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}
-.loading-overlay p {
-color: white;
-font-size: 1.2rem;
-font-weight: 500;
-}
-/* Notification Styles */
-.notification {
-position: fixed;
-top: 20px;
-right: 20px;
-padding: 15px 20px;
-border-radius: 10px;
-color: white;
-display: flex;
-align-items: center;
-gap: 10px;
-z-index: 10000;
-animation: slideIn 0.3s ease;
-box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-}
-}
-}
+
 }
 .notification.success {
-background: linear-gradient(45deg, #28a745, #20c997);
-.notification.error {
-background: linear-gradient(45deg, #dc3545, #e83e8c);
-.notification.warning {
-background: linear-gradient(45deg, #ffc107, #fd7e14);
-.notification.info {
-background: linear-gradient(45deg, #17a2b8, #20c9b0);
-@keyframes slideIn {
-from { transform: translateX(100%); opacity: 0; }
-to { transform: translateX(0); opacity: 1; }
-}
-.result-correct, .result-incorrect {
-padding: 20px;
-border-radius: 10px;
-margin: 15px 0;
-}
-.result-correct {
-background: #d4edda;
-border-left: 5px solid #28a745;
-}
-.result-incorrect {
-background: #f8d7da;
-border-left: 5px solid #dc3545;
-}
-.result-correct i, .result-incorrect i {
-font-size: 2rem;
-margin-bottom: 10px;
-}
-}
-.result-correct i {
-color: #28a745;
-.result-incorrect i {
-color: #dc3545;
-}
-.matrix-display, .eigen-display {
-background: white;
-padding: 15px;
-border-radius: 8px;
-margin: 15px 0;
-font-family: 'Courier New', monospace;
-}
-.hint-steps .step {
-background: white;
-padding: 15px;
-border-radius: 8px;
-margin: 15px 0;
-border-left: 4px solid #ffc107;
-}
-.hint-steps pre {
-background: #f8f9fa;
-padding: 10px;
-border-radius: 5px;
-overflow-x: auto;
-font-family: 'Courier New', monospace;
-}
-.tip {
-background: #e3f2fd;
-padding: 15px;
-border-radius: 8px;
-margin: 15px 0;
-border-left: 4px solid #2196f3;
-}
-.general-hints .hint-item {
-background: white;
-padding: 15px;
-border-radius: 8px;
-margin: 15px 0;
-}
-.issues ul {
-padding-left: 20px;
-margin: 10px 0;
-}
-.issues li {
-margin-bottom: 5px;
-color: #721c24;
-}
-@media (max-width: 1024px) {
-.container {
-flex-direction: column;
-}
-}
-.sidebar {
-width: 100%;
-.matrix-grid input {
-width: 60px;
-height: 50px;
-}
-}
-</style>
+    background: linear-gradient(45deg, #28a745, #20c997);
+    .notification.error {
+        background: linear-gradient(45deg, #dc3545, #e83e8c);
+        .notification.warning {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+            .notification.info {
+                background: linear-gradient(45deg, #17a2b8, #20c9b0);
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                .result-correct,
+                .result-incorrect {
+                    padding: 20px;
+                    border-radius: 10px;
+                    margin: 15px 0;
+                }
+                
+                .result-correct {
+                    background: #d4edda;
+                    border-left: 5px solid #28a745;
+                }
+                
+                .result-incorrect {
+                    background: #f8d7da;
+                    border-left: 5px solid #dc3545;
+                }
+                
+                .result-correct i,
+                .result-incorrect i {
+                    font-size: 2rem;
+                    margin-bottom: 10px;
+                }
+            }
+            .result-correct i {
+                color: #28a745;
+                .result-incorrect i {
+                    color: #dc3545;
+                }
+                
+                .matrix-display,
+                .eigen-display {
+                    background: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    font-family: 'Courier New', monospace;
+                }
+                
+                .hint-steps .step {
+                    background: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    border-left: 4px solid #ffc107;
+                }
+                
+                .hint-steps pre {
+                    background: #f8f9fa;
+                    padding: 10px;
+                    border-radius: 5px;
+                    overflow-x: auto;
+                    font-family: 'Courier New', monospace;
+                }
+                
+                .tip {
+                    background: #e3f2fd;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    border-left: 4px solid #2196f3;
+                }
+                
+                .general-hints .hint-item {
+                    background: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                }
+                
+                .issues ul {
+                    padding-left: 20px;
+                    margin: 10px 0;
+                }
+                
+                .issues li {
+                    margin-bottom: 5px;
+                    color: #721c24;
+                }
+                
+                @media (max-width: 1024px) {
+                    .container {
+                        flex-direction: column;
+                    }
+                }
+                
+                .sidebar {
+                    width: 100%;
+                    .matrix-grid input {
+                        width: 60px;
+                        height: 50px;
+                    }
+                }
+    </style>
 </head>
+
 <body>
-<div class="container">
-<!-- Sidebar with Team Information -->
-<div class="sidebar">
-<div class="logo">
-<i class="fas fa-atom"></i>
-<h2>Eigen Analyzer</h2>
-</div>
-<div class="team-section">
-<h3><i class="fas fa-users"></i> Development Team</h3>
-<div class="team-member">
-<div class="member-number">1</div>
-<div class="member-info">
-<div class="member-name">Aarya Suryavanshi</div>
-<div class="member-prn">PRN: 125B1F235</div>
-<div class="member-role">Backend & UI Developer</div>
-</div>
-</div>
-<div class="team-member">
-<div class="member-number">2</div>
-<div class="member-info">
-<div class="member-name">Shreya Irale</div>
-<div class="member-prn">PRN: 125B1F214</div>
-<div class="member-role">Frontend & Report</div>
-</div>
-</div>
-<div class="team-member">
-<div class="member-number">3</div>
-<div class="member-info">
-<div class="member-name">Anjali Borse</div>
-<div class="member-prn">PRN: 125B1F236</div>
-<div class="member-role">Backend & PPT</div>
-</div>
-</div>
-<div class="team-member">
-<div class="member-number">4</div>
-<div class="member-info">
-<div class="member-name">Samruddhi Magar</div>
-<div class="member-prn">PRN: 125B1F242</div>
-<div class="member-role">Frontend & Github</div>
-</div>
-</div>
-</div>
-<div class="instructions">
-<h3><i class="fas fa-info-circle"></i> How to Use</h3>
-<ol>
-<li>Enter matrix values in the grid</li>
-<li>Input eigenvalues (comma separated)</li>
-<li>Enter eigenvectors (one per line)</li>
-<li>Click "Analyze" to verify</li>
-<li>View hints for incorrect solutions</li>
-</ol>
-</div>
-</div>
-<!-- Main Content Area -->
-<div class="main-content">
-<header>
-<h1><i class="fas fa-calculator"></i> Eigenvalue & Eigenvector
-Analyzer</h1>
-<p class="subtitle">Verify your eigenvalue and eigenvector
-calculations with step-by-step guidance</p>
-</header>
-<!-- Matrix Input Section -->
-<div class="input-section">
-<div class="section-header">
-<h2><i class="fas fa-table"></i> Matrix Input</h2>
-<div class="matrix-size-control">
-<label>Matrix Size:</label>
-<select id="matrixSize">
+    <div class="container">
+        <!-- Sidebar with Team Information -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-atom"></i>
+                <h2>Eigen Analyzer</h2>
+            </div>
+            <div class="team-section">
+                <h3><i class="fas fa-users"></i> Development Team</h3>
+                <div class="team-member">
+                    <div class="member-number">1</div>
+                    <div class="member-info">
+                        <div class="member-name">Aarya Suryavanshi</div>
+                        <div class="member-prn">PRN: 125B1F235</div>
+                        <div class="member-role">Backend & UI Developer</div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-number">2</div>
+                    <div class="member-info">
+                        <div class="member-name">Shreya Irale</div>
+                        <div class="member-prn">PRN: 125B1F214</div>
+                        <div class="member-role">Frontend & Report</div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-number">3</div>
+                    <div class="member-info">
+                        <div class="member-name">Anjali Borse</div>
+                        <div class="member-prn">PRN: 125B1F236</div>
+                        <div class="member-role">Backend & PPT</div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-number">4</div>
+                    <div class="member-info">
+                        <div class="member-name">Samruddhi Magar</div>
+                        <div class="member-prn">PRN: 125B1F242</div>
+                        <div class="member-role">Frontend & Github</div>
+                    </div>
+                </div>
+            </div>
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                <ol>
+                    <li>Enter matrix values in the grid</li>
+                    <li>Input eigenvalues (comma separated)</li>
+                    <li>Enter eigenvectors (one per line)</li>
+                    <li>Click "Analyze" to verify</li>
+                    <li>View hints for incorrect solutions</li>
+                </ol>
+            </div>
+        </div>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <header>
+                <h1><i class="fas fa-calculator"></i> Eigenvalue & Eigenvector Analyzer
+                </h1>
+                <p class="subtitle">Verify your eigenvalue and eigenvector calculations with step-by-step guidance</p>
+            </header>
+            <!-- Matrix Input Section -->
+            <div class="input-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-table"></i> Matrix Input</h2>
+                    <div class="matrix-size-control">
+                        <label>Matrix Size:</label>
+                        <select id="matrixSize">
 <option value="2">2×2</option>
 <option value="3" selected>3×3</option>
 <option value="4">4×4</option>
 </select>
-</div>
-</div>
-<div id="matrixContainer" class="matrix-grid">
-<!-- Matrix inputs will be generated here -->
-</div>
-</div>
-<!-- Eigenvalues and Eigenvectors Input -->
-<div class="eigen-inputs">
-<div class="input-group">
-<h3><i class="fas fa-sigma"></i> Eigenvalues</h3>
-<input type="text" id="eigenvalues" placeholder="Enter
+                    </div>
+                </div>
+                <div id="matrixContainer" class="matrix-grid">
+                    <!-- Matrix inputs will be generated here -->
+                </div>
+            </div>
+            <!-- Eigenvalues and Eigenvectors Input -->
+            <div class="eigen-inputs">
+                <div class="input-group">
+                    <h3><i class="fas fa-sigma"></i> Eigenvalues</h3>
+                    <input type="text" id="eigenvalues" placeholder="Enter
 eigenvalues separated by commas (e.g., 2, 3, -1)">
-<small>Separate values with commas. For complex: 2+3i,
+                    <small>Separate values with commas. For complex: 2+3i,
 2-3i</small>
-</div>
-<div class="input-group">
-<h3><i class="fas fa-vector-square"></i> Eigenvectors</h3>
-<textarea id="eigenvectors" rows="5" placeholder="Enter one
+                </div>
+                <div class="input-group">
+                    <h3><i class="fas fa-vector-square"></i> Eigenvectors</h3>
+                    <textarea id="eigenvectors" rows="5" placeholder="Enter one
 eigenvector per line. Separate components with commas.
 Example:
 1, 0, -1
 0, 1, 0
 -2, 1, 1"></textarea>
-<small>Each line = one eigenvector. Number should match
+                    <small>Each line = one eigenvector. Number should match
 eigenvalues.</small>
-</div>
-</div>
-<!-- Control Buttons -->
-<div class="controls">
-<button class="btn btn-primary" id="analyzeBtn">
+                </div>
+            </div>
+            <!-- Control Buttons -->
+            <div class="controls">
+                <button class="btn btn-primary" id="analyzeBtn">
 <i class="fas fa-search"></i> Analyze Solution
 </button>
-<button class="btn btn-secondary" id="hintBtn">
+                <button class="btn btn-secondary" id="hintBtn">
 <i class="fas fa-lightbulb"></i> Show Calculation Steps
 </button>
-<button class="btn btn-danger" id="resetBtn">
+                <button class="btn btn-danger" id="resetBtn">
 <i class="fas fa-redo"></i> Reset All
 </button>
-</div>
-<!-- Results Section -->
-<div class="results-section" id="resultsSection">
-<h2><i class="fas fa-poll"></i> Analysis Results</h2>
-<div id="resultsContent"></div>
-</div>
-<!-- Hint Box -->
-<div class="hint-section" id="hintBox">
-<div class="hint-header">
-<h2><i class="fas fa-graduation-cap"></i> Calculation
-Hints</h2>
-<button class="close-btn" id="closeHintBtn">&times;</button>
-</div>
-<div id="hintContent"></div>
-</div>
-<!-- Loading Overlay -->
-<div class="loading-overlay" id="loadingOverlay">
-<div class="spinner"></div>
-<p>Analyzing your solution...</p>
-</div>
-</div>
-</div>
-<script>
-// Matrix size configuration
-let currentSize = 3;
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-createMatrixInputs();
-loadExample();
-// Add event listeners
-document.getElementById('matrixSize').addEventListener('change',
-function() {
-createMatrixInputs();
-});
-document.getElementById('analyzeBtn').addEventListener('click',
-analyze);
-document.getElementById('hintBtn').addEventListener('click',
-showGeneralHints);
-document.getElementById('resetBtn').addEventListener('click',
-resetAll);
-document.getElementById('closeHintBtn').addEventListener('click',
-closeHint);
-});
-// Create matrix input grid
-function createMatrixInputs() {
-currentSize = parseInt(document.getElementById('matrixSize').value);
-const container = document.getElementById('matrixContainer');
-container.innerHTML = '';
-// Set grid template columns
-container.style.gridTemplateColumns = `repeat(${currentSize}, 1fr)`;
-// Create input fields
-for (let i = 0; i < currentSize; i++) {
-for (let j = 0; j < currentSize; j++) {
-const input = document.createElement('input');
-input.type = 'number';
-input.id = `m${i}${j}`;
-input.className = 'matrix-cell';
-input.placeholder = `a${i+1}${j+1}`;
-input.step = 'any';
-container.appendChild(input);
-}
-}
-// Initialize with some values
-initializeMatrixValues();
-}
-1\n-2, 1, -1';
-// Initialize matrix with sample values
-function initializeMatrixValues() {
-if (currentSize === 2) {
-// Sample 2x2 matrix
-setMatrixValue(0, 0, 4);
-setMatrixValue(0, 1, 1);
-setMatrixValue(1, 0, 1);
-setMatrixValue(1, 1, 4);
-document.getElementById('eigenvalues').value = '3, 5';
-document.getElementById('eigenvectors').value = '1, -1\n1, 1';
-} else if (currentSize === 3) {
-// Sample 3x3 matrix
-setMatrixValue(0, 0, 4);
-setMatrixValue(0, 1, 1);
-setMatrixValue(0, 2, 2);
-setMatrixValue(1, 0, 0);
-setMatrixValue(1, 1, 3);
-setMatrixValue(1, 2, 0);
-setMatrixValue(2, 0, 1);
-setMatrixValue(2, 1, 2);
-setMatrixValue(2, 2, 4);
-document.getElementById('eigenvalues').value = '3, 5, 3';
-document.getElementById('eigenvectors').value = '1, 0, -1\n1, 0,
-} else if (currentSize === 4) {
-// Sample 4x4 matrix (diagonal)
-setMatrixValue(0, 0, 2);
-setMatrixValue(0, 1, 0);
-setMatrixValue(0, 2, 0);
-setMatrixValue(0, 3, 0);
-setMatrixValue(1, 0, 0);
-setMatrixValue(1, 1, 3);
-setMatrixValue(1, 2, 0);
-setMatrixValue(1, 3, 0);
-setMatrixValue(2, 0, 0);
-setMatrixValue(2, 1, 0);
-setMatrixValue(2, 2, 4);
-setMatrixValue(2, 3, 0);
-setMatrixValue(3, 0, 0);
-setMatrixValue(3, 1, 0);
-setMatrixValue(3, 2, 0);
-setMatrixValue(3, 3, 1);
-document.getElementById('eigenvalues').value = '2, 3, 4, 1';
-document.getElementById('eigenvectors').value = '1, 0, 0, 0\n0, 1,
-0, 0\n0, 0, 1, 0\n0, 0, 0, 1';
-}
-}
-// Helper function to set matrix value
-function setMatrixValue(row, col, value) {
-const input = document.getElementById(`m${row}${col}`);
-if (input) input.value = value;
-}
-// Load example data
-function loadExample() {
-initializeMatrixValues();
-showNotification('Example loaded successfully!', 'success');
-}
-// Get matrix data
-function getMatrixData() {
-const matrix = [];
-for (let i = 0; i < currentSize; i++) {
-matrix[i] = [];
-for (let j = 0; j < currentSize; j++) {
-const val = document.getElementById(`m${i}${j}`).value;
-matrix[i][j] = val === '' ? 0 : parseFloat(val);
-}
-}
-return matrix;
-}
-// Get eigenvalues
-function getEigenvalues() {
-const input = document.getElementById('eigenvalues').value;
-if (!input.trim()) return [];
-return input.split(',').map(val => {
-const trimmed = val.trim();
-// Handle simple complex numbers (basic support)
-if (trimmed.includes('i')) {
-const real = trimmed.replace('i', '').trim();
-return { real: parseFloat(real) || 0, imag: 1 };
-}
-const num = parseFloat(trimmed);
-return isNaN(num) ? null : num;
-}).filter(val => val !== null);
-}
-// Get eigenvectors
-function getEigenvectors() {
-const input = document.getElementById('eigenvectors').value;
-if (!input.trim()) return [];
-return input.split('\n').map(line => {
-if (!line.trim()) return null;
-return line.split(',').map(val => {
-const trimmed = val.trim();
-if (trimmed.includes('i')) {
-const real = trimmed.replace('i', '').trim();
-return { real: parseFloat(real) || 0, imag: 1 };
-}
-const num = parseFloat(trimmed);
-return isNaN(num) ? 0 : num;
-});
-}).filter(vec => vec !== null);
-// Show loading overlay
-function showLoading() {
-document.getElementById('loadingOverlay').style.display = 'flex';
-// Hide loading overlay
-function hideLoading() {
-document.getElementById('loadingOverlay').style.display = 'none';
-}
-}
-}
-// Show notification
-function showNotification(message, type = 'info') {
-// Remove existing notifications
-const existingNotifications =
-document.querySelectorAll('.notification');
-existingNotifications.forEach(notif => notif.remove());
-// Create notification element
-const notification = document.createElement('div');
-notification.className = `notification ${type}`;
-notification.innerHTML = `
+            </div>
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <h2><i class="fas fa-poll"></i> Analysis Results</h2>
+                <div id="resultsContent"></div>
+            </div>
+            <!-- Hint Box -->
+            <div class="hint-section" id="hintBox">
+                <div class="hint-header">
+                    <h2><i class="fas fa-graduation-cap"></i> Calculation Hints
+                    </h2>
+                    <button class="close-btn" id="closeHintBtn">&times;</button>
+                </div>
+                <div id="hintContent"></div>
+            </div>
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner"></div>
+                <p>Analyzing your solution...</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Matrix size configuration
+        let currentSize = 3;
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixInputs();
+            loadExample();
+            // Add event listeners
+            document.getElementById('matrixSize').addEventListener('change',
+                function() {
+                    createMatrixInputs();
+                });
+            document.getElementById('analyzeBtn').addEventListener('click',
+                analyze);
+            document.getElementById('hintBtn').addEventListener('click',
+                showGeneralHints);
+            document.getElementById('resetBtn').addEventListener('click',
+                resetAll);
+            document.getElementById('closeHintBtn').addEventListener('click',
+                closeHint);
+        });
+        // Create matrix input grid
+        function createMatrixInputs() {
+            currentSize = parseInt(document.getElementById('matrixSize').value);
+            const container = document.getElementById('matrixContainer');
+            container.innerHTML = '';
+            // Set grid template columns
+            container.style.gridTemplateColumns = `repeat(${currentSize}, 1fr)`;
+            // Create input fields
+            for (let i = 0; i < currentSize; i++) {
+                for (let j = 0; j < currentSize; j++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.id = `m${i}${j}`;
+                    input.className = 'matrix-cell';
+                    input.placeholder = `a${i+1}${j+1}`;
+                    input.step = 'any';
+                    container.appendChild(input);
+                }
+            }
+            // Initialize with some values
+            initializeMatrixValues();
+        }
+        1\ n - 2, 1, -1 ';
+            // Initialize matrix with sample values
+        function initializeMatrixValues() {
+            if (currentSize === 2) {
+                // Sample 2x2 matrix
+                setMatrixValue(0, 0, 4);
+                setMatrixValue(0, 1, 1);
+                setMatrixValue(1, 0, 1);
+                setMatrixValue(1, 1, 4);
+                document.getElementById('eigenvalues').value = '3, 5';
+                document.getElementById('eigenvectors').value = '1, -1\n1, 1';
+            } else if (currentSize === 3) {
+                // Sample 3x3 matrix
+                setMatrixValue(0, 0, 4);
+                setMatrixValue(0, 1, 1);
+                setMatrixValue(0, 2, 2);
+                setMatrixValue(1, 0, 0);
+                setMatrixValue(1, 1, 3);
+                setMatrixValue(1, 2, 0);
+                setMatrixValue(2, 0, 1);
+                setMatrixValue(2, 1, 2);
+                setMatrixValue(2, 2, 4);
+                document.getElementById('eigenvalues').value = '3, 5, 3';
+                document.getElementById('eigenvectors').value = '1, 0, -1\n1, 0,
+            } else if (currentSize === 4) {
+                // Sample 4x4 matrix (diagonal)
+                setMatrixValue(0, 0, 2);
+                setMatrixValue(0, 1, 0);
+                setMatrixValue(0, 2, 0);
+                setMatrixValue(0, 3, 0);
+                setMatrixValue(1, 0, 0);
+                setMatrixValue(1, 1, 3);
+                setMatrixValue(1, 2, 0);
+                setMatrixValue(1, 3, 0);
+                setMatrixValue(2, 0, 0);
+                setMatrixValue(2, 1, 0);
+                setMatrixValue(2, 2, 4);
+                setMatrixValue(2, 3, 0);
+                setMatrixValue(3, 0, 0);
+                setMatrixValue(3, 1, 0);
+                setMatrixValue(3, 2, 0);
+                setMatrixValue(3, 3, 1);
+                document.getElementById('eigenvalues').value = '2, 3, 4, 1';
+                document.getElementById('eigenvectors').value = '1, 0, 0, 0\n0, 1,
+                0, 0\ n0, 0, 1, 0\ n0, 0, 0, 1 ';
+            }
+        }
+        // Helper function to set matrix value
+        function setMatrixValue(row, col, value) {
+            const input = document.getElementById(`m${row}${col}`);
+            if (input) input.value = value;
+        }
+        // Load example data
+        function loadExample() {
+            initializeMatrixValues();
+            showNotification('Example loaded successfully!', 'success');
+        }
+        // Get matrix data
+        function getMatrixData() {
+            const matrix = [];
+            for (let i = 0; i < currentSize; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < currentSize; j++) {
+                    const val = document.getElementById(`m${i}${j}`).value;
+                    matrix[i][j] = val === '' ? 0 : parseFloat(val);
+                }
+            }
+            return matrix;
+        }
+        // Get eigenvalues
+        function getEigenvalues() {
+            const input = document.getElementById('eigenvalues').value;
+            if (!input.trim()) return [];
+            return input.split(',').map(val => {
+                const trimmed = val.trim();
+                // Handle simple complex numbers (basic support)
+                if (trimmed.includes('i')) {
+                    const real = trimmed.replace('i', '').trim();
+                    return {
+                        real: parseFloat(real) || 0,
+                        imag: 1
+                    };
+                }
+                const num = parseFloat(trimmed);
+                return isNaN(num) ? null : num;
+            }).filter(val => val !== null);
+        }
+        // Get eigenvectors
+        function getEigenvectors() {
+            const input = document.getElementById('eigenvectors').value;
+            if (!input.trim()) return [];
+            return input.split('\n').map(line => {
+                if (!line.trim()) return null;
+                return line.split(',').map(val => {
+                    const trimmed = val.trim();
+                    if (trimmed.includes('i')) {
+                        const real = trimmed.replace('i', '').trim();
+                        return {
+                            real: parseFloat(real) || 0,
+                            imag: 1
+                        };
+                    }
+                    const num = parseFloat(trimmed);
+                    return isNaN(num) ? 0 : num;
+                });
+            }).filter(vec => vec !== null);
+            // Show loading overlay
+            function showLoading() {
+                document.getElementById('loadingOverlay').style.display = 'flex';
+                // Hide loading overlay
+                function hideLoading() {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }
+            }
+        }
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications =
+                document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
 <i class="fas fa-${type === 'success' ? 'check-circle' :
 type === 'error' ? 'exclamation-circle' :
 type === 'warning' ? 'exclamation-triangle' :
 'info-circle'}"></i>
 <span>${message}</span>
 `;
-// Add to page
-document.body.appendChild(notification);
-// Remove after 3 seconds
-setTimeout(() => {
-notification.style.opacity = '0';
-setTimeout(() => notification.remove(), 300);
-}, 3000);
-}
-// Analyze solution
-function analyze() {
-const matrix = getMatrixData();
-const eigenvalues = getEigenvalues();
-const eigenvectors = getEigenvectors();
-// Validation
-if (eigenvalues.length === 0) {
-showNotification('Please enter at least one eigenvalue', 'error');
-return;
-}
-if (eigenvectors.length === 0) {
-showNotification('Please enter at least one eigenvector', 'error');
-return;
-}
-if (eigenvalues.length !== eigenvectors.length) {
-showNotification(`Number of eigenvalues (${eigenvalues.length})
+            // Add to page
+            document.body.appendChild(notification);
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        // Analyze solution
+        function analyze() {
+            const matrix = getMatrixData();
+            const eigenvalues = getEigenvalues();
+            const eigenvectors = getEigenvectors();
+            // Validation
+            if (eigenvalues.length === 0) {
+                showNotification('Please enter at least one eigenvalue', 'error');
+                return;
+            }
+            if (eigenvectors.length === 0) {
+                showNotification('Please enter at least one eigenvector', 'error');
+                return;
+            }
+            if (eigenvalues.length !== eigenvectors.length) {
+                showNotification(`Number of eigenvalues (${eigenvalues.length})
 doesn't match number of eigenvectors (${eigenvectors.length})`, 'error');
-return;
-}
-// Check eigenvector dimensions
-for (let i = 0; i < eigenvectors.length; i++) {
-if (eigenvectors[i].length !== currentSize) {
-showNotification(`Eigenvector ${i+1} has
+                return;
+            }
+            // Check eigenvector dimensions
+            for (let i = 0; i < eigenvectors.length; i++) {
+                if (eigenvectors[i].length !== currentSize) {
+                    showNotification(`Eigenvector ${i+1} has
 ${eigenvectors[i].length} components, but matrix is ${currentSize}x${currentSize}`,
-'error');
-return;
-}
-backend)
-}
-showLoading();
-// Simulate analysis with timeout (in real app, this would call
-setTimeout(() => {
-const result = analyzeSolution(matrix, eigenvalues, eigenvectors);
-displayResults(result);
-if (result.is_correct) {
-showNotification('All eigenvalues and eigenvectors are
-correct!', 'success');
-} else {
-showNotification('Some values are incorrect. Check hints for
-guidance.', 'warning');
-}
-hideLoading();
-}, 1500);
-}
-// Analyze solution (client-side logic)
-function analyzeSolution(matrix, eigenvalues, eigenvectors) {
-let allCorrect = true;
-let errorMessages = [];
-// For each eigenvalue-eigenvector pair
-for (let i = 0; i < eigenvalues.length; i++) {
-const lambda = typeof eigenvalues[i] === 'object' ?
-eigenvalues[i].real : eigenvalues[i];
-const vector = eigenvectors[i].map(comp =>
-typeof comp === 'object' ? comp.real : comp
-);
-// Calculate A*v
-const Av = multiplyMatrixVector(matrix, vector);
-// Calculate λ*v
-const lambdaV = vector.map(x => lambda * x);
-// Check if they're approximately equal
-if (!vectorsApproximatelyEqual(Av, lambdaV, 0.001)) {
-allCorrect = false;
-errorMessages.push(`Pair ${i+1}: Av ≠ λv for eigenvalue
+                        'error');
+                    return;
+                }
+                backend)
+        }
+        showLoading();
+        // Simulate analysis with timeout (in real app, this would call
+        setTimeout(() => {
+                    const result = analyzeSolution(matrix, eigenvalues, eigenvectors);
+                    displayResults(result);
+                    if (result.is_correct) {
+                        showNotification('All eigenvalues and eigenvectors are
+                            correct!', '
+                            success ');
+                        }
+                        else {
+                            showNotification('Some values are incorrect. Check hints for
+                                guidance.
+                                ', '
+                                warning ');
+                            }
+                            hideLoading();
+                        }, 1500);
+                }
+                // Analyze solution (client-side logic)
+                function analyzeSolution(matrix, eigenvalues, eigenvectors) {
+                    let allCorrect = true;
+                    let errorMessages = [];
+                    // For each eigenvalue-eigenvector pair
+                    for (let i = 0; i < eigenvalues.length; i++) {
+                        const lambda = typeof eigenvalues[i] === 'object' ?
+                            eigenvalues[i].real : eigenvalues[i];
+                        const vector = eigenvectors[i].map(comp =>
+                            typeof comp === 'object' ? comp.real : comp
+                        );
+                        // Calculate A*v
+                        const Av = multiplyMatrixVector(matrix, vector);
+                        // Calculate λ*v
+                        const lambdaV = vector.map(x => lambda * x);
+                        // Check if they're approximately equal
+                        if (!vectorsApproximatelyEqual(Av, lambdaV, 0.001)) {
+                            allCorrect = false;
+                            errorMessages.push(`Pair ${i+1}: Av ≠ λv for eigenvalue
 ${lambda}`);
-}
-}
-return {
-is_correct: allCorrect,
-matrix: matrix,
-user_eigenvalues: eigenvalues,
-user_eigenvectors: eigenvectors,
-hints: errorMessages
-};
-}
-// Display results
-function displayResults(result) {
-const resultsSection = document.getElementById('resultsSection');
-const resultsContent = document.getElementById('resultsContent');
-const hintBox = document.getElementById('hintBox');
-// Show results section
-resultsSection.style.display = 'block';
-// Build results HTML
-let html = '';
-if (result.is_correct) {
-html = `
+                        }
+                    }
+                    return {
+                        is_correct: allCorrect,
+                        matrix: matrix,
+                        user_eigenvalues: eigenvalues,
+                        user_eigenvectors: eigenvectors,
+                        hints: errorMessages
+                    };
+                }
+                // Display results
+                function displayResults(result) {
+                    const resultsSection = document.getElementById('resultsSection');
+                    const resultsContent = document.getElementById('resultsContent');
+                    const hintBox = document.getElementById('hintBox');
+                    // Show results section
+                    resultsSection.style.display = 'block';
+                    // Build results HTML
+                    let html = '';
+                    if (result.is_correct) {
+                        html = `
 <div class="result-correct">
 <i class="fas fa-check-circle"></i>
 ✓ <h3> Correct Solution!</h3>
@@ -901,8 +997,8 @@ eigenvalue equation: A·v = λ·v
 </div>
 </div>
 `;
-} else {
-html = `
+                    } else {
+                        html = `
 hintBox.style.display = 'none';
 <div class="result-incorrect">
 <i class="fas fa-times-circle"></i>
@@ -1181,6 +1277,7 @@ Your matrix is diagonal → eigenvalues are diagonal
 hint += '</div>';
 return hint;
 }
-</script>
+    </script>
 </body>
+
 </html>
